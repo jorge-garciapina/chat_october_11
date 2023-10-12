@@ -1,0 +1,27 @@
+apiVersion: v1
+# The Kubernetes object being defined here is a Service.
+# A Service is an abstraction which defines a set of Pods and a way to access them, typically to expose them to external traffic.
+kind: Service
+
+metadata:
+  # The unique name for this Service within the namespace.
+  name: user-service
+
+spec:
+  # The selector is used to determine which pods will be targeted by this service.
+  # In this case, it'll target pods with a label "app" having the value "user-service".
+  # Essentially, this Service routes traffic to pods managed by the "user-deployment" we defined earlier.
+  selector:
+    app: user
+
+  # The ports block defines the port configurations for the Service.
+  ports:
+    # Details for a single port mapping.
+    - protocol: TCP # The network protocol this port listens to. Common values are TCP and UDP.
+      port: 3002 # The port on which the service will listen for traffic.
+      targetPort: 3002 # The port on the Pod to which traffic will be forwarded.
+
+  # The type of Service. "ClusterIP" means the Service will be accessible only from within the Kubernetes cluster.
+  # Other types include NodePort (exposes the Service on a static port on each Node in the cluster),
+  # LoadBalancer (provides a load-balanced IP from an external provider), and ExternalName (maps a Service to a DNS name).
+  type: ClusterIP

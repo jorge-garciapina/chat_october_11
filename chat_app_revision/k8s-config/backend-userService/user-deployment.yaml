@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+# The Kubernetes object we're defining here is a Deployment.
+# Deployments are higher-level constructs that manage ReplicaSets, which in turn manage pods.
+kind: Deployment
+metadata:
+  # The unique name for this Deployment within the namespace.
+  name: user-deployment
+
+  # Labels are key-value pairs associated with the Deployment.
+  # They can be used for various purposes including filtering and selection.
+  labels:
+    app: user
+
+# The blueprint of the Deployment named "user-deployment:"
+spec:
+  # The desired number of pod instances that should be maintained.
+  # If a pod goes down, the Deployment will ensure another is created to maintain the desired count.
+  replicas: 2
+
+  # The selector determines how the Deployment identifies the pods it should manage.
+  # In this case, it'll manage pods with a label "app" having the value "user".
+  selector:
+    matchLabels:
+      app: user
+
+  # The template defines the blueprint for the pod instances that will be created.
+  template:
+    # Metadata for the pod, including its labels.
+    metadata:
+      labels:
+        app: user
+
+    # The specification for the pod.
+    spec:
+      # Details of the container(s) that will be part of this pod.
+      containers:
+        # It is possible to make an analogy with a docker-compose file:
+        # Each container that runs in the pod is defined here.
+        # This setup will use an image named "user" with its latest tag.
+        - name: user-container
+          image: user-image:latest
+          # This tells Kubernetes to use the local image instead of pulling from a remote registry.
+          imagePullPolicy: IfNotPresent
+          ports:
+            # This maps the container's port to the pod's port, enabling network access.
+            - containerPort: 3002
+
+          # Environment variables for the container.
+          env:
+            - name: USER_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: user-private-information
+                  key: connection
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-private-information
+                  key: jwtSecret
