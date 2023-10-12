@@ -1,0 +1,41 @@
+# This is the version of the Kubernetes API that we're using for this resource.
+# "v1" is a commonly used version for core Kubernetes resources, including PersistentVolume.
+apiVersion: v1
+
+# A PersistentVolume (PV) in Kubernetes is a piece of storage in the cluster that has been provisioned by an administrator.
+# It's a resource in the cluster just like a node is a cluster resource.
+kind: PersistentVolume
+
+metadata:
+  # The unique name for this PersistentVolume within the Kubernetes namespace.
+  # This is how other resources or users can refer to this PersistentVolume.
+  name: mongodb-pv
+
+  # Labels are key-value pairs associated with the PersistentVolume.
+  # They can be used for various purposes including filtering and selection.
+  labels:
+    # This label is just an example which can be used to categorize or identify the type of storage.
+    type: local
+
+spec: # The specification of the desired behavior of the PersistentVolume.
+  # The storageClassName determines which StorageClass this PV belongs to.
+  # "manual" is just a placeholder and can be replaced with actual storage classes available in your cluster.
+  storageClassName: manual
+
+  # The total amount of storage space this PersistentVolume will provide.
+  capacity:
+    # This PV will provide 1 GiB (Gigabyte) of storage space.
+    storage: 1Gi
+
+  # Defines the mode of access for the PersistentVolume.
+  accessModes:
+    # "ReadWriteOnce" means the volume can be mounted as read-write by a single node.
+    # Other modes include "ReadOnlyMany" and "ReadWriteMany".
+    - ReadWriteOnce
+
+  # The hostPath volume mounts a directory from the node's filesystem into the pod.
+  # It's mostly used for single-node development and testing.
+  hostPath:
+    # The path on the host node's filesystem that will be used for this PersistentVolume.
+    # Any data saved to this path in a pod will remain even if the pod is deleted.
+    path: "/mnt/data"
