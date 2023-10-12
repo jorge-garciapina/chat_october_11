@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: server-private-information
-type: Opaque
-data:
-  authService: aHR0cDovL2F1dGgtc2VydmljZTozMDAxL2F1dGg=
-  userService: aHR0cDovL3VzZXItc2VydmljZTozMDAyL3VzZXI=
